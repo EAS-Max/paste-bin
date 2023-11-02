@@ -22,3 +22,6 @@ create_issue() {
 create_issue
 
 # s/"/\\"/g; s/$/\\n/; s/\\n$//
+
+# ISSUE_NUMBER=$(echo "$RESPONSE" | grep -o '"number": [0-9]*' | awk '{print $2}')
+
