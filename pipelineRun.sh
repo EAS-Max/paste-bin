@@ -21,3 +21,5 @@ else
   echo "No pipeline run found for issue ID $ISSUE_ID"
   exit 1
 fi
+
+# PIPELINE_RUN_NAME=$(oc get pipelinerun -n your-namespace -o jsonpath="{.items[?(@.spec.params[?(@.name=='issue_id')].value=='YOUR_ISSUE_ID')].metadata.name}")
