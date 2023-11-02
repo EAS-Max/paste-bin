@@ -46,3 +46,14 @@ elif [ "$STATUS" == "False" ]; then
 else
   echo "PipelineRun did not complete within the timeout period."
 fi
+
+
+
+# FAILED_TASKS=$(oc get pipelinerun $PIPELINE_RUN_NAME -n $NAMESPACE -o jsonpath='{range .status.taskRuns[*]}{.status.conditions[?(@.type=="Succeeded")].status=="False"}{.pipelineTaskName}{"\n"}{end}')
+#   for TASK in $FAILED_TASKS; do
+#     echo "Task $TASK failed."
+#     # Extract more details or logs for the failed task
+#     TASK_LOG=$(oc logs $PIPELINE_RUN_NAME-$TASK -n $NAMESPACE --all-containers)
+#     echo "Logs for Task $TASK:"
+#     echo "$TASK_LOG"
+#   done
