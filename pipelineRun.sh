@@ -57,3 +57,9 @@ fi
 #     echo "Logs for Task $TASK:"
 #     echo "$TASK_LOG"
 #   done
+
+
+if [[ "$status" == "True" || "$status" == "False" ]]; then
+    echo "PipelineRun has finished with status: $status"
+    break
+  fi
