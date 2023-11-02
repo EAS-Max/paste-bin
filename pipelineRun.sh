@@ -66,3 +66,13 @@ if [[ "$status" == "True" || "$status" == "False" ]]; then
     echo "PipelineRun has finished with status: $status"
     break
   fi
+
+
+
+FAILED_PODS=$(oc get pods -n $NAMESPACE -l "tekton.dev/pipelineRun=$PIPELINE_RUN_NAME" -o json | jq -r '.items[] | select(.status.phase == "Failed") | .metadata.name')
+
+for pod in $FAILED_PODS; do
+  echo "Logs for failed pod $pod:"
+  oc logs $pod --all-containers=true -n $NAMESPACE
+  # If you want to capture the logs into a variable or a file, you can do so here
+done
