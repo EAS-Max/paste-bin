@@ -26,3 +26,23 @@ fi
 #  JQ solution
 # PIPELINE_RUN_NAME=$(oc get pipelinerun -n your-namespace -o json | jq -r '.items[] | select(.spec.params[] | select(.name=="issue_id" and .value=="YOUR_ISSUE_ID")).metadata.name')
 # echo $PIPELINE_RUN_NAME
+# Wait for the PipelineRun to complete
+oc wait --for=condition=Succeeded --timeout=600s pipelinerun/$PIPELINE_RUN_NAME -n $NAMESPACE
+
+# Get the status of the PipelineRun
+STATUS=$(oc get pipelinerun $PIPELINE_RUN_NAME -n $NAMESPACE -o jsonpath='{.status.conditions[?(@.type=="Succeeded")].status}')
+
+# Check if the PipelineRun was successful
+if [ "$STATUS" == "True" ]; then
+  echo "PipelineRun succeeded."
+  # You can capture other details here if needed
+elif [ "$STATUS" == "False" ]; then
+  echo "PipelineRun failed."
+  # Capture the failure details
+  REASON=$(oc get pipelinerun $PIPELINE_RUN_NAME -n $NAMESPACE -o jsonpath='{.status.conditions[?(@.type=="Succeeded")].reason}')
+  MESSAGE=$(oc get pipelinerun $PIPELINE_RUN_NAME -n $NAMESPACE -o jsonpath='{.status.conditions[?(@.type=="Succeeded")].message}')
+  echo "Reason: $REASON"
+  echo "Message: $MESSAGE"
+else
+  echo "PipelineRun did not complete within the timeout period."
+fi
