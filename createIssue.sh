@@ -20,3 +20,5 @@ create_issue() {
 
 # Execute the function
 create_issue
+
+# s/"/\\"/g; s/$/\\n/; s/\\n$//
