@@ -23,3 +23,6 @@ else
 fi
 
 # PIPELINE_RUN_NAME=$(oc get pipelinerun -n your-namespace -o jsonpath="{.items[?(@.spec.params[?(@.name=='issue_id')].value=='YOUR_ISSUE_ID')].metadata.name}")
+#  JQ solution
+# PIPELINE_RUN_NAME=$(oc get pipelinerun -n your-namespace -o json | jq -r '.items[] | select(.spec.params[] | select(.name=="issue_id" and .value=="YOUR_ISSUE_ID")).metadata.name')
+# echo $PIPELINE_RUN_NAME
