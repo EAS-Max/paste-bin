@@ -24,4 +24,11 @@ create_issue
 # s/"/\\"/g; s/$/\\n/; s/\\n$//
 
 # ISSUE_NUMBER=$(echo "$RESPONSE" | grep -o '"number": [0-9]*' | awk '{print $2}')
-
+# # echo "$ISSUE_NUMBER"
+# close_issue() {
+#     curl -s -X PATCH "$API_URL/$ISSUE_NUMBER" \
+#     -H "Authorization: token $TOKEN" \
+#     -H "Content-Type: application/json" \
+#     -d '{"state": "closed"}'
+# }
+# close_issue
