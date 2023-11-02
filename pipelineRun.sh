@@ -48,6 +48,8 @@ else
 fi
 
 
+ERROR_MESSAGE=$(oc get pipelinerun "$PIPELINE_RUN_NAME" -n "$NAMESPACE" -o json | jq -r '.status.conditions[] | select(.reason == "Failed").message')
+
 # FAILED_TASKS=$(oc get pipelinerun $PIPELINE_RUN_NAME -n $NAMESPACE -o json | jq -r '.status.taskRuns | to_entries[] | select(.value.status.conditions[] | select(.type=="Succeeded" and .status=="False")) | .value.pipelineTaskName')
 
 # FAILED_TASKS=$(oc get pipelinerun $PIPELINE_RUN_NAME -n $NAMESPACE -o jsonpath='{range .status.taskRuns[*]}{.status.conditions[?(@.type=="Succeeded")].status=="False"}{.pipelineTaskName}{"\n"}{end}')
