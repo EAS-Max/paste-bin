@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-cronjob
+spec:
+  schedule: "0 0 * * *"  
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: shared-secrets
+              emptyDir: {}
+            - name: script-volume
+              configMap:
+                name: vault-fetch-script
+          initContainers:
+            - name: fetch-secrets
+              image: vault 
+              volumeMounts:
+                - name: shared-secrets
+                  mountPath: /etc/secrets
+                - name: script-volume
+                  mountPath: /scripts
+              command: ["/bin/bash", "/scripts/fetch-secrets.sh"]
+          containers:
+            - name: my-main-container
+              image: my-main-image
+              volumeMounts:
+                - name: shared-secrets
+                  mountPath: /etc/secrets
+          restartPolicy: OnFailure
